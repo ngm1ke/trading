@@ -9,9 +9,17 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@hookform/resolvers": "5.2.2",
+    "@reduxjs/toolkit": "2.11.0",
+    "@tanstack/react-virtual": "3.13.12",
+    "lightweight-charts": "5.0.9",
+    "lucide-react": "0.555.0",
     "next": "16.0.6",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "react-hook-form": "7.67.0",
+    "react-redux": "9.2.0",
+    "zod": "4.1.13"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
