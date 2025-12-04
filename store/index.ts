@@ -3,11 +3,12 @@ import { configureStore, createAction } from "@reduxjs/toolkit";
 import { uiReducer } from "./uiSlice";
 
 import { chartReducer } from "./chartSlice";
-import { BinanceTickerMessage } from "@/types";
+import { BinanceKlineMessage, BinanceTickerMessage } from "@/types";
 import { tickerReducer } from "./tickerSlice";
 
 export const batchSocketUpdate = createAction<{
   ticker: BinanceTickerMessage | null;
+  kline: BinanceKlineMessage | null;
 }>("trading/batchSocketUpdate");
 
 

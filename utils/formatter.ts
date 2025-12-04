@@ -1,3 +1,9 @@
+export function formatPair(symbol: string) {
+  const idx = symbol.indexOf("USDT");
+  if (idx > 0) return symbol.slice(0, idx) + " / USDT";
+  return symbol;
+}
+
 export function formatPrice(price: number | string | undefined): string {
   if (price === undefined || price === null) return "0.00";
   const val = typeof price === "string" ? parseFloat(price) : price;

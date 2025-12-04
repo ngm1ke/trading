@@ -1,4 +1,9 @@
-import { BinanceTickerMessage, ConnectionStatus } from "@/types";
+import {
+  BinanceKlineMessage,
+  BinanceTickerMessage,
+  ConnectionStatus,
+  KlineInterval,
+} from "@/types";
 
 interface StreamPayload {
   stream: string;
@@ -11,11 +16,13 @@ export class WebSocketService {
   private status: ConnectionStatus = "disconnected";
   private statusCallback: ((status: ConnectionStatus) => void) | null = null;
   private symbol: string = "BTCUSDT";
+  private klineInterval: KlineInterval = "1m";
   private reconnectTimeout: NodeJS.Timeout | null = null;
   private reconnectDelay: number = 1000;
   private maxReconnectDelay: number = 30000;
 
   private tickerBuffer: BinanceTickerMessage | null = null;
+  private klineBuffer: BinanceKlineMessage | null = null;
 
   // Important
   private constructor() {}
@@ -27,16 +34,18 @@ export class WebSocketService {
     return WebSocketService.instance;
   }
 
-  public connect(symbol = "BTCUSDT") {
+  public connect(symbol = "BTCUSDT", klineInterval: KlineInterval = "1m") {
     this.symbol = symbol.toLocaleLowerCase();
 
     this.cleanup();
 
     this.updateStatus("connecting");
-
-    const streams = [`${this.symbol}@ticker`].join("/");
+    console.log("klineInterval", klineInterval);
+    const streams = [
+      `${this.symbol}@ticker`,
+      `${this.symbol}@kline_${klineInterval}`,
+    ].join("/");
     const wsUrl = `wss://stream.binance.com:9443/stream?streams=${streams}`;
-    console.log(wsUrl);
     try {
       this.socket = new WebSocket(wsUrl);
 
@@ -73,6 +82,7 @@ export class WebSocketService {
   public flush() {
     const updates = {
       ticker: this.tickerBuffer,
+      kline: this.klineBuffer,
     };
 
     this.clearBuffers();
@@ -82,6 +92,20 @@ export class WebSocketService {
   public disconnect() {
     this.cleanup();
     this.updateStatus("disconnected");
+  }
+
+  public setSymbol(symbol: string) {
+    const lower = symbol.toLowerCase();
+    if (this.symbol === lower) return;
+    this.connect(lower, this.klineInterval);
+  }
+
+  public setKlineInterval(interval: KlineInterval) {
+    if (this.klineInterval === interval) return;
+    this.klineInterval = interval;
+    if (this.socket) {
+      this.connect(this.symbol, interval);
+    }
   }
 
   public clearBuffers() {
@@ -103,12 +127,15 @@ export class WebSocketService {
 
   private handleIncomingMessage(payload: StreamPayload) {
     const { stream, data } = payload;
-    console.log(stream, data);
-    this.tickerBuffer = data as BinanceTickerMessage;
+    if (stream.endsWith("@ticker")) {
+      this.tickerBuffer = data as BinanceTickerMessage;
+    } else if (stream.includes("@kline_")) {
+      this.klineBuffer = data as BinanceKlineMessage;
+    }
   }
 
   public hasData(): boolean {
-    return this.tickerBuffer !== null;
+    return this.tickerBuffer !== null || this.klineBuffer !== null;
   }
 
   private cleanup() {
@@ -149,7 +176,7 @@ export class WebSocketService {
         this.reconnectDelay * 2,
         this.maxReconnectDelay,
       );
-      this.connect(this.symbol);
+      this.connect(this.symbol, this.klineInterval);
     }, this.reconnectDelay);
   }
 }

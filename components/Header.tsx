@@ -2,16 +2,16 @@
 
 import React from "react";
 import useAppSelector from "@/hooks/useAppSelector";
-import { formatPercent, formatPrice, formatVolume } from "@/utils/formatter";
+import {
+  formatPair,
+  formatPercent,
+  formatPrice,
+  formatVolume,
+} from "@/utils/formatter";
+import { SelectPairs } from "./SelectPairs";
 
-function formatPair(symbol: string) {
-  const idx = symbol.indexOf("USDT");
-  if (idx > 0) return symbol.slice(0, idx) + " / USDT";
-  return symbol;
-}
 
 export function Header() {
-  const symbol = useAppSelector((state) => state.ui.symbol);
   const connectionStatus = useAppSelector((state) => state.ui.connectionStatus);
   const ticker = useAppSelector((state) => state.ticker.data);
 
@@ -46,7 +46,7 @@ export function Header() {
 
   return (
     <header className="flex flex-wrap items-center justify-between border-b border-slate-800 bg-slate-950 px-6 py-3 text-slate-200 shadow-md">
-      <div className="flex items-center space-x-6">
+      <div className="flex items-center gap-6 self-center">
         <div className="flex items-center space-x-2">
           <div className="h-6 w-6 rounded-full bg-emerald-500"></div>
           <span className="text-lg font-bold tracking-wider text-white">
@@ -56,12 +56,7 @@ export function Header() {
 
         {/* Symbol Indicator */}
         <div className="flex items-center space-x-2 border-l border-slate-800 pl-6">
-          <span className="text-xl font-bold tracking-tight text-white">
-            {formatPair(symbol)}
-          </span>
-          <span className="rounded bg-slate-800 px-2 py-0.5 text-xs font-semibold text-slate-400">
-            SPOT
-          </span>
+          <SelectPairs />
         </div>
       </div>
 
