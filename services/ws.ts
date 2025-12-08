@@ -1,6 +1,8 @@
 import {
+  BinanceDepthMessage,
   BinanceKlineMessage,
   BinanceTickerMessage,
+  BinanceTradeMessage,
   ConnectionStatus,
   KlineInterval,
 } from "@/types";
@@ -23,6 +25,8 @@ export class WebSocketService {
 
   private tickerBuffer: BinanceTickerMessage | null = null;
   private klineBuffer: BinanceKlineMessage | null = null;
+  private tradeBuffer: BinanceTradeMessage[] = [];
+  private depthBuffer: BinanceDepthMessage[] = [];
 
   // Important
   private constructor() {}
@@ -40,10 +44,11 @@ export class WebSocketService {
     this.cleanup();
 
     this.updateStatus("connecting");
-    console.log("klineInterval", klineInterval);
     const streams = [
       `${this.symbol}@ticker`,
+      `${this.symbol}@trade`,
       `${this.symbol}@kline_${klineInterval}`,
+      `${this.symbol}@depth@100ms`,
     ].join("/");
     const wsUrl = `wss://stream.binance.com:9443/stream?streams=${streams}`;
     try {
@@ -82,6 +87,8 @@ export class WebSocketService {
   public flush() {
     const updates = {
       ticker: this.tickerBuffer,
+      trades: [...this.tradeBuffer],
+      depths: [...this.depthBuffer],
       kline: this.klineBuffer,
     };
 
@@ -127,15 +134,31 @@ export class WebSocketService {
 
   private handleIncomingMessage(payload: StreamPayload) {
     const { stream, data } = payload;
+
     if (stream.endsWith("@ticker")) {
       this.tickerBuffer = data as BinanceTickerMessage;
+    } else if (stream.endsWith("@trade")) {
+      this.tradeBuffer.push(data as BinanceTradeMessage);
+      if (this.tradeBuffer.length > 500) {
+        this.tradeBuffer.shift();
+      }
+    } else if (stream.endsWith("@depth@100ms")) {
+      this.depthBuffer.push(data as BinanceDepthMessage);
+      if (this.depthBuffer.length > 100) {
+        this.depthBuffer.shift();
+      }
     } else if (stream.includes("@kline_")) {
       this.klineBuffer = data as BinanceKlineMessage;
     }
   }
 
   public hasData(): boolean {
-    return this.tickerBuffer !== null || this.klineBuffer !== null;
+    return (
+      this.tickerBuffer !== null ||
+      this.klineBuffer !== null ||
+      this.tradeBuffer.length > 0 ||
+      this.depthBuffer.length > 0
+    );
   }
 
   private cleanup() {

@@ -1,5 +1,8 @@
 import { Chart } from "@/components/Chart";
 import Header from "@/components/Header";
+import { OpenOrders } from "@/components/OpenOrders";
+import OrderBook from "@/components/OrderBook";
+import { TradeHistory } from "@/components/TradeHistory";
 
 export default function Home() {
   return (
@@ -12,17 +15,21 @@ export default function Home() {
             <div className="lg:col-span-2">
               <Chart />
             </div>
-            <div className="lg:col-span-1">OrderBook</div>
+            <div className="lg:col-span-1">
+              <OrderBook />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">Open Order</div>
-            <div className="lg:col-span-1">Portfolio</div>
+            <div className="lg:col-span-2">
+              <OpenOrders />
+            </div>
+            <div className="lg:col-span-1"></div>
           </div>
         </div>
 
         <div className="xl:col-span-1 flex flex-col space-y-6">
-          form, history
+          <TradeHistory />
         </div>
       </main>
     </div>

@@ -36,7 +36,6 @@ export interface Ticker {
   quoteVolume: number;
 }
 
-
 export type KlineInterval =
   | "1m"
   | "3m"
@@ -74,4 +73,34 @@ export interface BinanceKlineMessage {
     x: boolean; // Is this kline closed?
     q: string; // Quote asset volume
   };
+}
+
+export interface BinanceTradeMessage {
+  e: string; // Event type
+  E: number; // Event time
+  s: string; // Symbol
+  t: number; // Trade ID
+  p: string; // Price
+  q: string; // Quantity
+  b: number; // Buyer order ID
+  a: number; // Seller order ID
+  T: number; // Trade time
+  m: boolean; // Is the buyer the market maker?
+}
+export interface BinanceDepthMessage {
+  e: string; // Event type
+  E: number; // Event time
+  s: string; // Symbol
+  U: number; // First update ID in event
+  u: number; // Last update ID in event
+  b: [string, string][]; // Bids to be updated [price, quantity]
+  a: [string, string][]; // Asks to be updated [price, quantity]
+}
+
+export interface Trade {
+  id: string;
+  price: number;
+  quantity: number;
+  time: number;
+  isBuyerMaker: boolean; // true = Sell, false = Buy
 }

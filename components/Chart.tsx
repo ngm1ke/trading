@@ -28,7 +28,6 @@ const TIMEFRAMES: { label: string; value: KlineInterval }[] = [
 ];
 
 export function Chart() {
-  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const symbol = useAppSelector((state) => state.ui.symbol);
   const [interval, setInterval] = useState<KlineInterval>("1m");
@@ -176,7 +175,6 @@ export function Chart() {
   const handleIntervalChange = useCallback((value: KlineInterval) => {
     setInterval(value);
   }, []);
-  console.log("lastKline", lastKline);
   return (
     <>
       <div className="relative flex flex-col rounded-xl border border-slate-800 bg-slate-950 p-4 shadow-xl">
