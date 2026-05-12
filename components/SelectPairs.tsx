@@ -1,6 +1,8 @@
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { wsService } from "@/services/ws";
+import { clearOrderBook } from "@/store/orderBookSlice";
+import { clearTrades } from "@/store/tradeSlice";
 import { setSymbol } from "@/store/uiSlice";
 import { formatPair } from "@/utils/formatter";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -77,6 +79,14 @@ export const SelectPairs = () => {
 
   const handlePairChange = useCallback(
     (pair: string) => {
+      if (symbol === pair) {
+        setSearchOpen(false);
+        setSearchQuery("");
+        return;
+      }
+
+      dispatch(clearOrderBook());
+      dispatch(clearTrades());
       dispatch(setSymbol(pair));
       // TODO: this can be forgot. Need combine function
 
@@ -84,7 +94,7 @@ export const SelectPairs = () => {
       setSearchOpen(false);
       setSearchQuery("");
     },
-    [dispatch],
+    [dispatch, symbol],
   );
 
   return (

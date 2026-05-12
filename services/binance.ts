@@ -11,9 +11,10 @@ export interface BinanceDepthResponse {
 export async function fetchOrderBookSnapshot(
   symbol: string = "BTCUSDT",
   limit: number = 100,
+  signal?: AbortSignal,
 ): Promise<BinanceDepthResponse> {
   const url = `${BASE_URL}/depth?symbol=${symbol.toUpperCase()}&limit=${limit}`;
-  const response = await fetch(url);
+  const response = await fetch(url, { signal });
   if (!response.ok) {
     throw new Error(
       `Failed to fetch order book snapshot: ${response.statusText}`,

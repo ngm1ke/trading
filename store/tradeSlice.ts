@@ -13,7 +13,11 @@ const initialState: TradeState = {
 const tradeSlice = createSlice({
   name: "trade",
   initialState,
-  reducers: {},
+  reducers: {
+    clearTrades(state) {
+      state.trades = [];
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(batchSocketUpdate, (state, action) => {
       const socketTrades = action.payload.trades;
@@ -32,4 +36,5 @@ const tradeSlice = createSlice({
   },
 });
 
+export const { clearTrades } = tradeSlice.actions;
 export const tradeReducer = tradeSlice.reducer;

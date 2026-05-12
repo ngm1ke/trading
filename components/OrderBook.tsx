@@ -5,7 +5,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { fetchOrderBookSnapshot } from "@/services/binance";
-import { setSnapshot } from "@/store/orderBookSlice";
+import { clearOrderBook, setSnapshot } from "@/store/orderBookSlice";
 import {
   selectSortedBids,
   selectSortedAsks,
@@ -28,15 +28,25 @@ export function OrderBook() {
   const ticker = useAppSelector((state) => state.ticker.data);
 
   useEffect(() => {
+    const controller = new AbortController();
+    dispatch(clearOrderBook());
+
     async function loadSnapshot() {
       try {
-        const snapshot = await fetchOrderBookSnapshot(symbol, 100);
+        const snapshot = await fetchOrderBookSnapshot(
+          symbol,
+          100,
+          controller.signal,
+        );
         dispatch(setSnapshot(snapshot));
       } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
         console.error("Failed to load order book snapshot:", err);
       }
     }
     loadSnapshot();
+
+    return () => controller.abort();
   }, [dispatch, symbol]);
 
   // Virtualization for Asks

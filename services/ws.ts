@@ -117,6 +117,9 @@ export class WebSocketService {
 
   public clearBuffers() {
     this.tickerBuffer = null;
+    this.klineBuffer = null;
+    this.tradeBuffer = [];
+    this.depthBuffer = [];
   }
 
   public setStatusCallback(callback: (status: ConnectionStatus) => void) {
