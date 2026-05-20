@@ -2,9 +2,10 @@ import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 import { wsService } from "@/services/ws";
 import { clearOrderBook } from "@/store/orderBookSlice";
+import { resetBalancesForPair } from "@/store/portfolioSlice";
 import { clearTrades } from "@/store/tradeSlice";
 import { setSymbol } from "@/store/uiSlice";
-import { formatPair } from "@/utils/formatter";
+import { formatPair, parseSymbol } from "@/utils/formatter";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const PAIRS = [
@@ -89,6 +90,7 @@ export const SelectPairs = () => {
       dispatch(clearTrades());
       dispatch(setSymbol(pair));
       // TODO: this can be forgot. Need combine function
+      dispatch(resetBalancesForPair(parseSymbol(pair)));
 
       wsService.setSymbol(pair);
       setSearchOpen(false);

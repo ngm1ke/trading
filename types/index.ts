@@ -104,3 +104,41 @@ export interface Trade {
   time: number;
   isBuyerMaker: boolean; // true = Sell, false = Buy
 }
+
+export type OrderSide = "BUY" | "SELL";
+export type OrderType = "LIMIT" | "MARKET";
+
+export interface LimitOrder {
+  id: string;
+  symbol: string;
+  side: OrderSide;
+  type: "LIMIT";
+  price: number;
+  quantity: number;
+  timestamp: number;
+  status: "NEW" | "FILLED" | "CANCELED";
+}
+
+export interface OrderHistoryEntry {
+  id: string;
+  symbol: string;
+  side: OrderSide;
+  type: OrderType;
+  price: number;
+  quantity: number;
+  timestamp: number;
+  status: "FILLED" | "CANCELED";
+  avgExecutionPrice?: number;
+}
+
+export interface AssetBalance {
+  asset: string;
+  free: number;
+  locked: number;
+}
+
+export interface PortfolioState {
+  balances: Record<string, AssetBalance>;
+  openOrders: LimitOrder[];
+  orderHistory: OrderHistoryEntry[];
+}

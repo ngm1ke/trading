@@ -12,6 +12,7 @@ import {
 import { tickerReducer } from "./tickerSlice";
 import { orderBookReducer } from "./orderBookSlice";
 import { tradeReducer } from "./tradeSlice";
+import { portfolioReducer } from "./portfolioSlice";
 
 export const batchSocketUpdate = createAction<{
   ticker: BinanceTickerMessage | null;
@@ -28,6 +29,7 @@ export const store = configureStore({
     ticker: tickerReducer,
     trade: tradeReducer,
     orderBook: orderBookReducer,
+    portfolio: portfolioReducer,
   },
   // Disable serializability check for high performance frames
   middleware: (getDefaultMiddleware) =>

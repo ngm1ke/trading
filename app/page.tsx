@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import { OpenOrders } from "@/components/OpenOrders";
 import OrderBook from "@/components/OrderBook";
 import { TradeHistory } from "@/components/TradeHistory";
+import TradingForm from "@/components/TradingForm";
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
         </div>
 
         <div className="xl:col-span-1 flex flex-col space-y-6">
+          <TradingForm />
           <TradeHistory />
         </div>
       </main>
