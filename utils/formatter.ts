@@ -4,6 +4,13 @@ export function formatPair(symbol: string) {
   return symbol;
 }
 
+/** Extract base and quote assets from a Binance symbol, e.g. "ETHUSDT" → { base: "ETH", quote: "USDT" } */
+export function parseSymbol(symbol: string): { base: string; quote: string } {
+  const idx = symbol.indexOf("USDT");
+  if (idx > 0) return { base: symbol.slice(0, idx), quote: "USDT" };
+  return { base: symbol.slice(0, -4), quote: symbol.slice(-4) };
+}
+
 export function formatPrice(price: number | string | undefined): string {
   if (price === undefined || price === null) return "0.00";
   const val = typeof price === "string" ? parseFloat(price) : price;
