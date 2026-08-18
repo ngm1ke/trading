@@ -1,21 +1,10 @@
 import { createSlice, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import { batchSocketUpdate, RootState } from "./index";
-
-interface OrderBookSliceState {
-  bids: Record<string, number>;
-  asks: Record<string, number>;
-  lastUpdateId: number;
-}
-
-const initialState: OrderBookSliceState = {
-  bids: {},
-  asks: {},
-  lastUpdateId: 0,
-};
+import { defaultStoreSlices } from "@/utils/consts";
 
 const orderBookSlice = createSlice({
   name: "orderBook",
-  initialState,
+  initialState: defaultStoreSlices.orderBook,
   reducers: {
     setSnapshot(
       state,

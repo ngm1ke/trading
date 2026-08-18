@@ -142,3 +142,26 @@ export interface PortfolioState {
   openOrders: LimitOrder[];
   orderHistory: OrderHistoryEntry[];
 }
+
+export interface UiState {
+  symbol: string;
+  connectionStatus: ConnectionStatus;
+}
+
+export interface ChartState {
+  lastKline: Candlestick | null;
+}
+
+export interface OrderBookState {
+  bids: Record<string, number>;
+  asks: Record<string, number>;
+  lastUpdateId: number;
+}
+
+export interface TickerState {
+  data: Ticker | null;
+}
+
+export interface TradeState {
+  trades: Trade[];
+}

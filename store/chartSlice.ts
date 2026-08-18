@@ -1,18 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Candlestick } from "@/types";
 import { batchSocketUpdate } from ".";
-
-interface ChartSliceState {
-  lastKline: Candlestick | null;
-}
-
-const initialState: ChartSliceState = {
-  lastKline: null,
-};
+import { defaultStoreSlices } from "@/utils/consts";
 
 const chartSlice = createSlice({
   name: "chart",
-  initialState,
+  initialState: defaultStoreSlices.chart,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(batchSocketUpdate, (state, action) => {

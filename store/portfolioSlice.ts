@@ -1,30 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  LimitOrder,
   OrderSide,
   OrderType,
-  OrderHistoryEntry,
-  AssetBalance,
 } from "@/types";
-
-interface PortfolioSliceState {
-  balances: Record<string, AssetBalance>;
-  openOrders: LimitOrder[];
-  orderHistory: OrderHistoryEntry[];
-}
-
-const initialState: PortfolioSliceState = {
-  balances: {
-    BTC: { asset: "BTC", free: 0.5, locked: 0 },
-    USDT: { asset: "USDT", free: 10000.0, locked: 0 },
-  },
-  openOrders: [],
-  orderHistory: [],
-};
+import { defaultStoreSlices } from "@/utils/consts";
 
 const portfolioSlice = createSlice({
   name: "portfolio",
-  initialState,
+  initialState: defaultStoreSlices.portfolio,
   reducers: {
     placeOrder(
       state,
