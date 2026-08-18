@@ -1,18 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { batchSocketUpdate } from "./index";
-import { Ticker } from "@/types";
-
-interface TickerState {
-  data: Ticker | null;
-}
-
-const initialState: TickerState = {
-  data: null,
-};
+import { defaultStoreSlices } from "@/utils/consts";
 
 const tickerSlice = createSlice({
   name: "ticker",
-  initialState,
+  initialState: defaultStoreSlices.ticker,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(batchSocketUpdate, (state, action) => {

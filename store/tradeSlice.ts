@@ -1,18 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { batchSocketUpdate } from "./index";
-import { Trade } from "@/types";
-
-interface TradeState {
-  trades: Trade[];
-}
-
-const initialState: TradeState = {
-  trades: [],
-};
+import { defaultStoreSlices } from "@/utils/consts";
 
 const tradeSlice = createSlice({
   name: "trade",
-  initialState,
+  initialState: defaultStoreSlices.trade,
   reducers: {
     clearTrades(state) {
       state.trades = [];

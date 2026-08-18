@@ -50,7 +50,7 @@ export function Header() {
         <div className="flex items-center space-x-2">
           <div className="h-6 w-6 rounded-full bg-emerald-500"></div>
           <span className="text-lg font-bold tracking-wider text-white">
-            Let&apos;s TRADE
+            Binance Trading Dashboard
           </span>
         </div>
 

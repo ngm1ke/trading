@@ -1,19 +1,10 @@
 import { ConnectionStatus } from "@/types";
+import { defaultStoreSlices } from "@/utils/consts";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface UiState {
-  symbol: string;
-  connectionStatus: ConnectionStatus;
-}
-
-const initialState: UiState = {
-  symbol: "BTCUSDT",
-  connectionStatus: "disconnected",
-};
 
 const uiSlice = createSlice({
   name: "ui",
-  initialState,
+  initialState: defaultStoreSlices.ui,
   reducers: {
     setSymbol(state, action: PayloadAction<string>) {
       state.symbol = action.payload.toUpperCase();
